@@ -1,16 +1,22 @@
-const express = require('express');
-const cors = require('cors');
-
-const authRoutes = require('./routes/auth.routes');
-const quranRoutes = require('./routes/quran.routes');
+const express = require("express");
+const cors = require("cors");
+const quranRoutes = require("./routes/quran-route");
 
 const app = express();
+
+// Middleware Global
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/v1/quran', quranRoutes);
+// Routes
+app.use("/api", quranRoutes);
 
-app.listen(3000, () => {
-  console.log('API running on http://localhost:3000');
+// Penanganan Route Tidak Ditemukan
+app.use((req, res) => {
+  res.status(404).json({ message: "Endpoint tidak ditemukan" });
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
